@@ -29,6 +29,10 @@ export default function Home() {
     [members, genderFilter]
   );
 
+  const handleSwipeSuccess = (id: string) => {
+    setMembers(prev => prev.filter(m => m.id !== id));
+  };
+
   return (
     <ProtectedRoute>
       <Navbar />
@@ -71,7 +75,7 @@ export default function Home() {
               </Card>
             </div>
           ) : filteredMembers.length > 0 ? (
-            <Stack key={genderFilter} members={filteredMembers} className="w-full flex justify-center" />
+            <Stack key={genderFilter} members={filteredMembers} onSwipeSuccess={handleSwipeSuccess} className="w-full flex justify-center" />
           ) : (
             <div className="flex flex-col items-center justify-center text-[#C5A059]/50 italic font-serif">
               <p>Aucun membre ne correspond à ce critère.</p>

@@ -8,7 +8,7 @@ import { swipeMember } from '@/services/api';
 import { useRouter } from 'next/navigation';
 import { Heading, Text, Button } from '@gruand-co/core';
 
-const Stack: React.FC<GridProps> = ({ members, className = "" }) => {
+const Stack: React.FC<GridProps> = ({ members, className = "", onSwipeSuccess }) => {
   const [stack, setStack] = useState(members);
   const [matchMember, setMatchMember] = useState<M | null>(null);
   const router = useRouter();
@@ -30,6 +30,9 @@ const Stack: React.FC<GridProps> = ({ members, className = "" }) => {
       .catch(err => console.error("Erreur serveur lors du swipe:", err));
 
     setStack(prev => prev.filter(m => m.id !== id));
+    if (onSwipeSuccess) {
+      onSwipeSuccess(id);
+    }
   };
 
   if (!stack.length) {

@@ -1,6 +1,7 @@
 export interface GridProps {
   members: Member[];
   className?: string;
+  onSwipeSuccess?: (id: string) => void;
 }
 
 export interface Member {

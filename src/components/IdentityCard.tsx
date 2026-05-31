@@ -133,23 +133,21 @@ const IdentityCard: React.FC<ExtendedProps> = ({
   );
 
   return (
-    <>
-      {isTopCard ? (
-        <motion.div
-          style={{ x, rotate, opacity, position: 'absolute' }}
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          onDragEnd={handleDragEnd}
-          whileDrag={{ scale: 1.05 }}
-          className="cursor-grab active:cursor-grabbing z-50"
-        >
-          {cardInnerContent}
-        </motion.div>
-      ) : (
-        <div className="absolute opacity-40 scale-95 translate-y-4 pointer-events-none z-0">
-          {cardInnerContent}
-        </div>
-      )}
+    <motion.div
+      style={isTopCard ? { x, rotate, opacity, position: 'absolute', zIndex: 50 } : { position: 'absolute', zIndex: 0 }}
+      exit={{
+        x: x.get() > 0 ? 1000 : -1000,
+        opacity: 0,
+        scale: 0.5,
+        transition: { duration: 0.4 }
+      }}
+      drag={isTopCard ? "x" : false}
+      dragConstraints={{ left: 0, right: 0 }}
+      onDragEnd={handleDragEnd}
+      whileDrag={{ scale: 1.05 }}
+      className={isTopCard ? "cursor-grab active:cursor-grabbing" : "opacity-40 scale-95 translate-y-4 pointer-events-none"}
+    >
+      {cardInnerContent}
 
       {/* MODAL SYSTEM */}
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} title="">
@@ -208,8 +206,7 @@ const IdentityCard: React.FC<ExtendedProps> = ({
           </div>
         </div>
       </Modal>
-    </>
-  );
+    </motion.div>
+  )
 };
-
 export default IdentityCard;

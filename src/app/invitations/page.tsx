@@ -49,7 +49,7 @@ export default function InvitationsPage() {
   };
 
   const copyToClipboard = (code: string, id: string) => {
-    const text = `Has sido seleccionado. Presenta este sello en La Bóveda para solicitar tu admisión: ${code}\n\nAcceso: https://thevault.elite/invite`;
+    const text = `Has sido seleccionado. Presenta este sello en La Bóveda para solicitar tu admisión: ${code}`;
     navigator.clipboard.writeText(text);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 3000);
@@ -67,7 +67,7 @@ export default function InvitationsPage() {
         <div className="absolute bottom-1/4 -right-1/4 w-[50vw] h-[50vw] bg-[#C5A059] rounded-full blur-[150px] opacity-10 pointer-events-none" />
 
         <div className="max-w-5xl mx-auto w-full flex-1 flex flex-col items-center relative z-10">
-          
+
           {/* Main Vault Generation Area */}
           <div className="w-full relative mb-16 p-10 border border-[#C5A059]/20 bg-[#1A1816]/80 backdrop-blur-sm shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col items-center group">
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#C5A059]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
@@ -111,7 +111,7 @@ export default function InvitationsPage() {
                     Abriendo el cofre...
                   </div>
                 )}
-                
+
                 {!loading && invites.length === 0 && (
                   <motion.div
                     initial={{ opacity: 0 }}
@@ -135,7 +135,7 @@ export default function InvitationsPage() {
                       <div className="absolute top-4 right-4 w-12 h-12 bg-[#8B0000] rounded-full opacity-80 shadow-[0_4px_10px_rgba(0,0,0,0.5),_inset_0_0_10px_rgba(0,0,0,0.5)] flex items-center justify-center mix-blend-multiply">
                         <span className="text-[#141210] font-serif text-sm italic font-bold">V</span>
                       </div>
-                      
+
                       <div className="mb-8">
                         <p className="text-[8px] tracking-[0.4em] text-[#C5A059]/50 uppercase mb-2">Código de Ingreso</p>
                         <Heading level={3} variant="gold" style={{ fontSize: '1.25rem', letterSpacing: '0.3em', fontWeight: 300 }}>
