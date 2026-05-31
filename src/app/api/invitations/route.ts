@@ -43,7 +43,7 @@ export async function POST(req: NextRequest) {
   try {
     const { data: me } = await supabase
       .from('members')
-      .select('id')
+      .select('id, full_name, email')
       .eq('email', user.email)
       .single();
 
@@ -51,16 +51,23 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Miembro no reconocido' }, { status: 404 });
     }
 
-    // Limit to 3 invitations
-    const { count, error: countError } = await supabase
-      .from('invitations')
-      .select('id', { count: 'exact' })
-      .eq('created_by', me.id);
+    const isFounder = me.email === 'maelg396@gmail.com' || 
+                      me.email === 'maelgruand7@gmail.com' || 
+                      me.full_name?.includes('Mael Gruand') || 
+                      me.full_name?.includes('Eliot');
 
-    if (countError) throw countError;
+    if (!isFounder) {
+      // Limit to 3 invitations
+      const { count, error: countError } = await supabase
+        .from('invitations')
+        .select('id', { count: 'exact' })
+        .eq('created_by', me.id);
 
-    if (count !== null && count >= 3) {
-      return NextResponse.json({ error: 'Límite de sellos (3/3) alcanzado' }, { status: 400 });
+      if (countError) throw countError;
+
+      if (count !== null && count >= 3) {
+        return NextResponse.json({ error: 'Límite de sellos (3/3) alcanzado' }, { status: 400 });
+      }
     }
 
     const newCode = `VLT-${Math.random().toString(36).substring(2, 8).toUpperCase()}-${new Date().getFullYear()}`;

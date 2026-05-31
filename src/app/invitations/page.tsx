@@ -21,19 +21,35 @@ export default function InvitationsPage() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isFounder, setIsFounder] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(true);
 
   useEffect(() => {
-    const fetchInvites = async () => {
+    const fetchInvitesAndProfile = async () => {
       try {
         const data = await getMyInvitations();
         setInvites(data);
+
+        const token = localStorage.getItem('vault_token');
+        const profileRes = await fetch('/api/members/me', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (profileRes.ok) {
+          const profileData = await profileRes.json();
+          const founderCheck = profileData.email === 'maelg396@gmail.com' ||
+                               profileData.email === 'maelgruand7@gmail.com' ||
+                               profileData.full_name?.includes('Mael Gruand') ||
+                               profileData.full_name?.includes('Eliot');
+          setIsFounder(founderCheck);
+        }
       } catch (err) {
-        console.error("Error cargando invitaciones:", err);
+        console.error("Error cargando invitaciones y perfil:", err);
       } finally {
         setLoading(false);
+        setProfileLoading(false);
       }
     };
-    fetchInvites();
+    fetchInvitesAndProfile();
   }, []);
 
   const handleGenerateCode = async () => {
@@ -81,7 +97,7 @@ export default function InvitationsPage() {
 
             <Button
               onClick={handleGenerateCode}
-              disabled={isGenerating || invites.length >= 3 || loading}
+              disabled={isGenerating || (!isFounder && invites.length >= 3) || loading || profileLoading}
               variant="outline"
               className="cursor-pointer"
               style={{
@@ -93,14 +109,14 @@ export default function InvitationsPage() {
                 border: '1px solid #C5A059'
               }}
             >
-              {isGenerating ? 'Forjando Sello...' : invites.length >= 3 ? 'Límite Alcanzado (3/3)' : 'Extraer del Cofre'}
+              {isGenerating ? 'Forjando Sello...' : (!isFounder && invites.length >= 3) ? 'Límite Alcanzado (3/3)' : 'Extraer del Cofre'}
             </Button>
           </div>
 
           {/* Existing Invitations List */}
           <div className="w-full">
             <Heading level={3} variant="gold" className="text-xl italic mb-8">
-              Sellos Activos
+              Sellos Activos {isFounder ? `(${invites.length})` : `(${invites.length}/3)`}
             </Heading>
             <Divider style={{ borderColor: 'rgba(197, 160, 89, 0.2)', marginBottom: '32px' }} />
 
