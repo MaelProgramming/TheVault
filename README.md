@@ -1,36 +1,148 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⚜️ The Vault — Club de la Élite
 
-## Getting Started
+Bienvenido a **The Vault**, una plataforma web premium de networking y matchmaking diseñada bajo un estilo visual sobrio, clásico y sofisticado (inspirado en la estética "Old Money"). 
 
-First, run the development server:
+Esta aplicación ha sido refactorizada completamente a **Next.js**, integrando la lógica frontend y backend en un único ecosistema seguro y de alto rendimiento.
+
+---
+
+## 🚀 Características Principales
+
+*   **Acceso Exclusivo**: Puertas cerradas resguardadas mediante un sistema de llaves de invitación.
+*   **Afinidad Élite**: Algoritmo de matching basado en especialización académica, afinidad generacional y una semilla aleatoria de afinidad ("gremio alquímico").
+*   **Correspondencia Privada**: Sistema de chats privados en tiempo real y lectura de correspondencia una vez que se concreta un match mutuo.
+*   **Retratos Personalizados**: Carga y almacenamiento seguro de avatares en Supabase Storage.
+*   **Identidad Exclusiva**: Rangos de usuario asignados (Postulante, Heredero, Fundador).
+
+---
+
+## 🛠️ Tecnologías Utilizadas
+
+*   **Framework**: [Next.js](https://nextjs.org/) (App Router & Route Handlers)
+*   **Librería UI**: `@gruand-co/core` (diseño premium de componentes interactivos)
+*   **Base de Datos**: [Supabase](https://supabase.com/) (PostgreSQL & Storage)
+*   **Autenticación**: [Firebase Auth](https://firebase.google.com/) (Frontend) & [Firebase Admin SDK](https://firebase.google.com/docs/admin) (Backend token verification)
+*   **Animaciones**: [Framer Motion](https://www.framer.com/motion/)
+
+---
+
+## 📁 Estructura del Proyecto
+
+El código fuente principal se encuentra dentro del directorio `src/`:
+
+```bash
+├── apps/                    # Aplicaciones antiguas (Express API & Web original en Vite)
+├── public/                  # Archivos estáticos e iconos
+└── src/
+    ├── app/                 # Páginas y API Route Handlers de Next.js
+    │   ├── api/             # API Endpoints (conversations, invitations, members, swipe)
+    │   ├── auth/            # Rutas de autenticación
+    │   ├── conversations/   # Mensajería y correspondencia
+    │   ├── invitations/     # Forjado y control de sellos de invitación
+    │   ├── invite/          # Entrada restringida (puerta de la bóveda)
+    │   ├── login/           # Acceso de miembros
+    │   ├── profile/         # Perfil de usuario y semblanza
+    │   └── register/        # Admisión de nuevos miembros
+    ├── components/          # Componentes de UI reactivos (Header, Navbar, IdentityCard, etc.)
+    ├── context/             # AuthContext de Firebase
+    ├── lib/                 # Utilidades backend (Supabase client, Firebase Admin & checkAuth)
+    ├── services/            # Clientes API frontend (Firebase client y peticiones fetch)
+    └── types/               # Tipos TypeScript compartidos
+```
+
+---
+
+## 🔧 Configuración e Instalación
+
+### 1. Clonar el repositorio e instalar dependencias
+
+```bash
+npm install
+```
+
+### 2. Variables de entorno (`.env.local`)
+
+Crea un archivo `.env.local` en la raíz del proyecto con la siguiente estructura:
+
+```env
+# Supabase Configuration
+SUPABASE_URL="https://your-project.supabase.co"
+SUPABASE_ANON_KEY="your-anon-key"
+SUPABASE_SERVICE_ROLE_KEY="your-service-role-key"
+
+# Firebase Admin SDK Configuration
+FIREBASE_PROJECT_ID="your-project-id"
+FIREBASE_CLIENT_EMAIL="your-firebase-admin-email"
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nyour-private-key\n-----END PRIVATE KEY-----"
+
+# Postgres Direct Connection (for scripts/migrations)
+POSTGRES_URL_NON_POOLING="postgres://postgres:password@host:5432/postgres?sslmode=require"
+```
+
+### 3. Ejecutar en desarrollo
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🗄️ Esquema de Base de Datos
 
-## Learn More
+Las tablas y relaciones clave en la base de datos Supabase son:
 
-To learn more about Next.js, take a look at the following resources:
+### 1. `members` (Miembros del Club)
+*   `id` (`uuid`, PK, default `gen_random_uuid()`)
+*   `email` (`text`, unique)
+*   `full_name` (`text`)
+*   `sex` (`text` — 'M' o 'F')
+*   `major` (`text`)
+*   `graduation_year` (`integer`)
+*   `bio` (`text`)
+*   `avatar_url` (`text`)
+*   `is_verified` (`boolean`, default `false`)
+*   `university` (`text`, default 'The Vault')
+*   `random_seed` (`integer`)
+*   `created_at` (`timestamp with time zone`)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 2. `swipes` (Interacciones de Afinidad)
+*   `id` (`uuid`, PK)
+*   `swiper_id` (`uuid`, FK -> `members.id`)
+*   `swiped_id` (`uuid`, FK -> `members.id`)
+*   `is_like` (`boolean`)
+*   `created_at` (`timestamp with time zone`)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. `conversations` (Lazos Forjados)
+*   `id` (`uuid`, PK)
+*   `user_1` (`uuid`, FK -> `members.id`)
+*   `user_2` (`uuid`, FK -> `members.id`)
+*   `created_at` (`timestamp with time zone`)
 
-## Deploy on Vercel
+### 4. `messages` (Correspondencia)
+*   `id` (`uuid`, PK)
+*   `conversation_id` (`uuid`, FK -> `conversations.id`)
+*   `sender_id` (`uuid`, FK -> `members.id`)
+*   `content` (`text`)
+*   `is_read` (`boolean`, default `false`)
+*   `created_at` (`timestamp with time zone`)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 5. `invitations` (Sellos de Admisión)
+*   `id` (`uuid`, PK)
+*   `code` (`text`, unique)
+*   `created_by` (`uuid`, FK -> `members.id`)
+*   `status` (`text`, default 'active')
+*   `created_at` (`timestamp with time zone`)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📦 Despliegue en Vercel
+
+Para desplegar la aplicación en Vercel, asegúrate de añadir todas las variables de entorno listadas en el apartado `.env.local` en la sección de Variables de Entorno de tu proyecto en Vercel.
+
+Luego, puedes compilar localmente para verificar que todo esté en orden:
+
+```bash
+npm run build
+```
