@@ -82,6 +82,35 @@ export default function ConversationsPage() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  // Client-side auto-delivery updater for sent messages (simulating letter arrival)
+  useEffect(() => {
+    if (messages.length === 0) return;
+
+    const checkDelivery = () => {
+      const now = Date.now();
+      const TRANSIT_DELAY_MS = 10000;
+      let hasUpdates = false;
+
+      const updated = messages.map(msg => {
+        if (msg.is_mine && !msg.is_delivered) {
+          const messageTime = new Date(msg.created_at).getTime();
+          if (now - messageTime >= TRANSIT_DELAY_MS) {
+            hasUpdates = true;
+            return { ...msg, is_delivered: true };
+          }
+        }
+        return msg;
+      });
+
+      if (hasUpdates) {
+        setMessages(updated);
+      }
+    };
+
+    const timer = setInterval(checkDelivery, 1000);
+    return () => clearInterval(timer);
+  }, [messages]);
+
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || !activeConv) return;
@@ -153,10 +182,21 @@ export default function ConversationsPage() {
 
                         {msg.is_mine && (
                           <div className="absolute -bottom-5 right-0 flex items-center gap-2">
-                            <span className={`text-[7px] uppercase tracking-[0.2em] transition-all duration-1000 ${msg.is_read ? 'text-[#C5A059] opacity-100' : 'text-stone-600 opacity-40'}`}>
-                              {msg.is_read ? 'Leído' : 'Enviado'}
-                            </span>
-                            <div className={`w-1 h-1 rounded-full transition-all duration-1000 ${msg.is_read ? 'bg-[#C5A059] shadow-[0_0_8px_#C5A059]' : 'bg-stone-600'}`} />
+                            {!msg.is_delivered ? (
+                              <>
+                                <span className="text-[7px] uppercase tracking-[0.2em] text-stone-500/70 animate-pulse">En tránsito...</span>
+                                <svg className="w-2.5 h-2.5 text-[#C5A059]/50 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 19v-8.93a2 2 0 01.89-1.664l8-5.333a2 2 0 012.22 0l8 5.333A2 2 0 0121 10.07V19M3 19a2 2 0 002 2h14a2 2 0 002-2M3 19l6.75-4.5M21 19l-6.75-4.5M3 10l6.75 4.5M21 10l-6.75 4.5m0 0l-2.25-1.5a2 2 0 00-2.22 0l-2.25 1.5" />
+                                </svg>
+                              </>
+                            ) : (
+                              <>
+                                <span className={`text-[7px] uppercase tracking-[0.2em] transition-all duration-1000 ${msg.is_read ? 'text-[#C5A059] opacity-100' : 'text-stone-600 opacity-40'}`}>
+                                  {msg.is_read ? 'Leído' : 'Entregado'}
+                                </span>
+                                <div className={`w-1 h-1 rounded-full transition-all duration-1000 ${msg.is_read ? 'bg-[#C5A059] shadow-[0_0_8px_#C5A059]' : 'bg-stone-600'}`} />
+                              </>
+                            )}
                           </div>
                         )}
                       </div>

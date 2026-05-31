@@ -35,12 +35,25 @@ export async function GET(
 
     if (error) throw error;
 
-    const mapped = msgs?.map((m: any) => ({
-      ...m,
-      is_mine: m.sender_id === (me?.id)
-    }));
+    const now = Date.now();
+    const TRANSIT_DELAY_MS = 10000; // 10 seconds delay
 
-    return NextResponse.json(mapped || []);
+    const mapped = msgs?.map((m: any) => {
+      const isMine = m.sender_id === me?.id;
+      const messageTime = new Date(m.created_at).getTime();
+      const isDelivered = now - messageTime >= TRANSIT_DELAY_MS;
+      
+      return {
+        ...m,
+        is_mine: isMine,
+        is_delivered: isDelivered
+      };
+    }) || [];
+
+    // Filter: User sees their own sent letters immediately, but only sees the peer's letters if they are delivered
+    const visibleMessages = mapped.filter((m: any) => m.is_mine || m.is_delivered);
+
+    return NextResponse.json(visibleMessages);
   } catch (err: any) {
     console.error('Error fetching messages:', err);
     return NextResponse.json({ error: 'Erreur messages' }, { status: 500 });
@@ -93,7 +106,7 @@ export async function POST(
 
     if (error) throw error;
 
-    return NextResponse.json({ ...data, is_mine: true }, { status: 201 });
+    return NextResponse.json({ ...data, is_mine: true, is_delivered: false }, { status: 201 });
   } catch (err: any) {
     console.error('Error sending message:', err);
     return NextResponse.json({ error: 'Erreur système lors de l’envoi' }, { status: 500 });
