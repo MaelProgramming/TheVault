@@ -59,7 +59,7 @@ const IdentityCard: React.FC<ExtendedProps> = ({
   const avatarSrc = currentImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=F5F5DC&color=C5A059`;
 
   const cardInnerContent = (
-    <div className="group w-full max-w-[350px] transition-all duration-700">
+    <div className="group w-full max-w-[350px] transition-all duration-700 gold-shine-card">
       <Card elevation="high" hoverable style={{ backgroundColor: '#F5F5DC', border: '1px solid #C5A059' }}>
         <div className="relative h-[400px] w-full overflow-hidden bg-[#F5F5F5] mb-4">
           <img

@@ -7,7 +7,7 @@ import { type HeaderProps } from '@/types/Props';
 const Header: React.FC<HeaderProps> = ({ className = "", textContent = "", titleContent = "" }) => {
   return (
     <header className={`${className} flex flex-col items-center`}>
-      <Heading level={1} variant="gold" className="text-center italic tracking-widest">
+      <Heading level={1} variant="gold" className="text-center italic tracking-widest animate-text-shine">
         {titleContent}
       </Heading>
       <Divider ornament style={{ width: '120px', margin: '20px auto' }} />

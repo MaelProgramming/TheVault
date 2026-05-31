@@ -52,3 +52,48 @@ body {
 .animate-shimmer-line {
   animation: shimmerLine 2s ease-in-out infinite;
 }
+
+/* Premium Gold Text Shine Animation */
+@keyframes textShine {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.animate-text-shine {
+  background-size: 200% auto !important;
+  animation: textShine 6s linear infinite;
+}
+
+/* Premium Card Hover Golden Shine Sweep */
+.gold-shine-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.gold-shine-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -80%;
+  width: 250%;
+  height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 45%,
+    rgba(255, 235, 175, 0.3) 50%,
+    transparent 55%
+  );
+  transform: rotate(-12deg);
+  pointer-events: none;
+  opacity: 0;
+  transition: none;
+}
+
+.gold-shine-card:hover::after {
+  opacity: 1;
+  left: 120%;
+  transition: left 1.5s ease-in-out, opacity 0.3s ease-in-out;
+}
+
