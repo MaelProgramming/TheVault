@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+:root {
+  --background: #141210;
+  --foreground: #EFEBE4;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-cormorant);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-stagger {
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+  animation-delay: var(--stagger-delay);
+}
+
+@keyframes shimmerBg {
+  0% { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+.animate-shimmer-bg {
+  animation: shimmerBg 3s linear infinite;
+}
+
+@keyframes shimmerLine {
+  0% { width: 0%; opacity: 0; }
+  50% { width: 100%; opacity: 1; }
+  100% { width: 0%; opacity: 0; }
+}
+
+.animate-shimmer-line {
+  animation: shimmerLine 2s ease-in-out infinite;
+}

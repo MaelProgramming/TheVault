@@ -1,0 +1,61 @@
+'use client';
+
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
+import { auth } from '@/services/firebase';
+
+const Navbar = () => {
+  const { user } = useAuth();
+  const pathname = usePathname();
+
+  if (!user) return null;
+
+  const handleLogout = () => auth.signOut();
+
+  const links = [
+    { name: 'El Registro', path: '/' },
+    { name: 'Misivas', path: '/conversations' },
+    { name: 'Invitaciones', path: '/invitations' },
+    { name: 'Mi Perfil', path: '/profile' },
+  ];
+
+  return (
+    <nav className="fixed bottom-0 md:top-0 md:bottom-auto left-0 w-full z-[100] bg-[#141210]/95 backdrop-blur-md border-t md:border-t-0 md:border-b border-[#C5A059]/20 px-6 py-4">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        {/* Logo */}
+        <Link href="/" className="hidden md:block font-serif italic text-xl tracking-tighter text-[#C5A059] hover:opacity-80 transition-opacity">
+          The Vault
+        </Link>
+
+        {/* Navigation links */}
+        <div className="flex gap-10 w-full md:w-auto justify-around md:justify-end items-center">
+          {links.map((link) => {
+            const isActive = pathname === link.path;
+            return (
+              <Link
+                key={link.path}
+                href={link.path}
+                className={`text-[10px] tracking-[0.3em] uppercase transition-all duration-700 ease-in-out ${isActive
+                    ? 'text-[#C5A059] font-bold drop-shadow-[0_0_8px_rgba(197,160,89,0.3)]'
+                    : 'text-stone-500 hover:text-[#C5A059]/70'
+                  }`}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
+
+          <button
+            onClick={handleLogout}
+            className="text-[10px] tracking-[0.3em] uppercase text-red-900/40 hover:text-red-700 transition-colors duration-500 cursor-pointer"
+          >
+            Salir
+          </button>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;
