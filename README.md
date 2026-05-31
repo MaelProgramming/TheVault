@@ -50,45 +50,6 @@ El código fuente principal se encuentra dentro del directorio `src/`:
     └── types/               # Tipos TypeScript compartidos
 ```
 
----
-
-## 🔧 Configuración e Instalación
-
-### 1. Clonar el repositorio e instalar dependencias
-
-```bash
-npm install
-```
-
-### 2. Variables de entorno (`.env.local`)
-
-Crea un archivo `.env.local` en la raíz del proyecto con la siguiente estructura:
-
-```env
-# Supabase Configuration
-SUPABASE_URL="https://your-project.supabase.co"
-SUPABASE_ANON_KEY="your-anon-key"
-SUPABASE_SERVICE_ROLE_KEY="your-service-role-key"
-
-# Firebase Admin SDK Configuration
-FIREBASE_PROJECT_ID="your-project-id"
-FIREBASE_CLIENT_EMAIL="your-firebase-admin-email"
-FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nyour-private-key\n-----END PRIVATE KEY-----"
-
-# Postgres Direct Connection (for scripts/migrations)
-POSTGRES_URL_NON_POOLING="postgres://postgres:password@host:5432/postgres?sslmode=require"
-```
-
-### 3. Ejecutar en desarrollo
-
-```bash
-npm run dev
-```
-
-Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
-
----
-
 ## 🗄️ Esquema de Base de Datos
 
 Las tablas y relaciones clave en la base de datos Supabase son:
@@ -134,15 +95,3 @@ Las tablas y relaciones clave en la base de datos Supabase son:
 *   `created_by` (`uuid`, FK -> `members.id`)
 *   `status` (`text`, default 'active')
 *   `created_at` (`timestamp with time zone`)
-
----
-
-## 📦 Despliegue en Vercel
-
-Para desplegar la aplicación en Vercel, asegúrate de añadir todas las variables de entorno listadas en el apartado `.env.local` en la sección de Variables de Entorno de tu proyecto en Vercel.
-
-Luego, puedes compilar localmente para verificar que todo esté en orden:
-
-```bash
-npm run build
-```
