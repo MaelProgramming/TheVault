@@ -11,11 +11,30 @@ import { Heading, Text, Button } from '@gruand-co/core';
 const Stack: React.FC<GridProps> = ({ members, className = "", onSwipeSuccess }) => {
   const [stack, setStack] = useState(members);
   const [matchMember, setMatchMember] = useState<M | null>(null);
+  const [currentUser, setCurrentUser] = useState<M | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     setStack(members);
   }, [members]);
+
+  useEffect(() => {
+    const fetchMe = async () => {
+      try {
+        const token = localStorage.getItem('vault_token');
+        const res = await fetch('/api/members/me', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setCurrentUser(data);
+        }
+      } catch (err) {
+        console.error("Error fetching current user for match screen:", err);
+      }
+    };
+    fetchMe();
+  }, []);
 
   const handleSwipeSuccess = (id: string, direction: 'left' | 'right') => {
     const isLike = direction === 'right';
@@ -52,71 +71,149 @@ const Stack: React.FC<GridProps> = ({ members, className = "", onSwipeSuccess })
       <AnimatePresence>
         {matchMember && (
           <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-[#141210]/95 backdrop-blur-md px-4"
+            className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-[#141210]/98 px-4"
+            style={{
+              background: 'radial-gradient(circle, #2C1A12 0%, #0F0906 100%)'
+            }}
           >
-            <Heading 
-              level={1} 
-              variant="gold"
-              className="mb-4 text-center italic tracking-tighter"
-              style={{ fontSize: '3.5rem' }}
-            >
-              Alianza Forjada
-            </Heading>
-            <Text 
-              variant="small" 
-              style={{ letterSpacing: '0.4em', textTransform: 'uppercase', color: '#a8a29e', marginBottom: '48px' }}
-              className="text-center"
-            >
-              Tus intereses se alinean con los de {matchMember.full_name || matchMember.name}
-            </Text>
-            
-            <motion.img 
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              src={matchMember.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(matchMember.full_name || matchMember.name)}&background=F5F5DC&color=C5A059`} 
-              alt="Match" 
-              className="w-40 h-40 md:w-56 md:h-56 object-cover rounded-full border border-[#C5A059]/50 shadow-[0_0_50px_rgba(197,160,89,0.2)] mb-12"
+            {/* Hand-stitched leather patch frame border */}
+            <div 
+              className="absolute inset-6 border border-[#C5A059]/20 rounded-sm pointer-events-none" 
+              style={{ borderStyle: 'dashed', borderWidth: '1px' }} 
             />
-            
-            <motion.div 
-              initial={{ y: 50, opacity: 0 }}
+
+            {/* Glowing ambient light */}
+            <div className="absolute w-72 h-72 rounded-full bg-[#C5A059]/10 blur-[100px] pointer-events-none" />
+
+            {/* Gold metallic header with reflections */}
+            <motion.h1
+              initial={{ y: -30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.8, ease: 'easeOut' }}
+              className="text-center font-serif font-black tracking-[0.2em] mb-4 drop-shadow-2xl"
+              style={{
+                fontSize: '3.25rem',
+                textTransform: 'uppercase',
+                background: 'linear-gradient(135deg, #FFF3CC 0%, #D4AF37 25%, #4E2E19 50%, #C5A059 75%, #FFF3CC 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                filter: 'drop-shadow(0px 3px 3px rgba(0,0,0,0.9)) drop-shadow(0px 0px 15px rgba(212,175,55,0.4))'
+              }}
+            >
+              It's a Match
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="text-center text-[10px] tracking-[0.4em] uppercase text-[#EFEBE4]/60 font-serif max-w-sm mb-16 leading-relaxed"
+            >
+              Una afinidad alquímica ha sido sellada.
+            </motion.p>
+
+            {/* AVATARS CONTAINER */}
+            <div className="relative flex justify-center items-center w-full max-w-xs h-48 mb-16">
+              
+              {/* Left Avatar (Current User) */}
+              <motion.div
+                initial={{ x: -100, opacity: 0, rotate: -15 }}
+                animate={{ x: -25, opacity: 1, rotate: -5 }}
+                transition={{ type: 'spring', stiffness: 50, delay: 0.5 }}
+                className="relative w-36 h-36 rounded-full border-2 border-[#C5A059] overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.8)] z-10"
+              >
+                <img
+                  src={currentUser?.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser?.full_name || 'Tú')}&background=141210&color=C5A059`}
+                  alt="Tú"
+                  className="w-full h-full object-cover grayscale"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              </motion.div>
+
+              {/* Central Seal (The Vault "V" Crest) */}
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: 'spring', damping: 10, delay: 0.9 }}
+                className="absolute z-20 w-12 h-12 bg-[#8B0000] rounded-full border border-[#C5A059] shadow-[0_5px_15px_rgba(0,0,0,0.6)] flex items-center justify-center"
+              >
+                <span className="text-[#C5A059] font-serif text-sm italic font-bold tracking-tighter">V</span>
+              </motion.div>
+
+              {/* Right Avatar (Matched Member) */}
+              <motion.div
+                initial={{ x: 100, opacity: 0, rotate: 15 }}
+                animate={{ x: 25, opacity: 1, rotate: 5 }}
+                transition={{ type: 'spring', stiffness: 50, delay: 0.5 }}
+                className="relative w-36 h-36 rounded-full border-2 border-[#C5A059] overflow-hidden shadow-[0_15px_30px_rgba(0,0,0,0.8)] z-10"
+              >
+                <img
+                  src={matchMember.avatar_url || `https://ui-avatars.com/api/?name=${encodeURIComponent(matchMember.full_name || matchMember.name)}&background=141210&color=C5A059`}
+                  alt={matchMember.full_name || matchMember.name}
+                  className="w-full h-full object-cover grayscale"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+              </motion.div>
+
+            </div>
+
+            {/* MATCH DETAILS */}
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.7 }}
-              className="flex flex-col gap-4 w-full max-w-sm"
+              className="text-center mb-16"
+            >
+              <h2 className="text-[11px] tracking-[0.2em] uppercase text-[#C5A059] font-bold mb-2">
+                Correspondencia con {matchMember.full_name || matchMember.name}
+              </h2>
+              {matchMember.elite_score !== undefined && (
+                <p className="text-[10px] tracking-[0.15em] text-[#C5A059]/60 italic font-serif">
+                  ✧ Afinidad Académica de Élite: {matchMember.elite_score}% ✧
+                </p>
+              )}
+            </motion.div>
+
+            {/* BUTTONS */}
+            <motion.div 
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.9 }}
+              className="flex flex-col gap-4 w-full max-w-xs"
             >
               <Button 
                 onClick={() => router.push('/conversations')} 
                 variant="outline"
                 className="w-full cursor-pointer"
                 style={{
-                  backgroundColor: '#1A1816',
+                  backgroundColor: '#1E140F',
                   color: '#C5A059',
-                  border: '1px solid rgba(197, 160, 89, 0.3)',
+                  border: '1px solid #C5A059',
                   padding: '20px 0',
                   fontSize: '10px',
                   letterSpacing: '0.4em',
-                  textTransform: 'uppercase'
+                  textTransform: 'uppercase',
+                  boxShadow: '0 4px 10px rgba(0,0,0,0.5)'
                 }}
               >
-                Iniciar Correspondencia
+                Escribir Carta
               </Button>
               <Button 
                 onClick={() => setMatchMember(null)} 
                 variant="ghost"
                 className="w-full cursor-pointer"
                 style={{
-                  color: 'rgba(197, 160, 89, 0.6)',
+                  color: 'rgba(197, 160, 89, 0.5)',
                   padding: '20px 0',
                   fontSize: '9px',
                   letterSpacing: '0.3em',
                   textTransform: 'uppercase'
                 }}
               >
-                Continuar Explorando
+                Volver al Cofre
               </Button>
             </motion.div>
           </motion.div>
