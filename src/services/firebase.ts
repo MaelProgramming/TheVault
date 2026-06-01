@@ -2,7 +2,7 @@ import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCrNgj-CpyTQC66avNIv_VlWH4iEZxHR0M",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_PUBLIC_KEY,
   authDomain: "the-vault-2025.firebaseapp.com",
   projectId: "the-vault-2025",
   storageBucket: "the-vault-2025.firebasestorage.app",
@@ -12,6 +12,7 @@ const firebaseConfig = {
 };
 
 // Initialisation avec garde pour éviter les doublons en Next.js hot reload
+console.log("Firebase API Key reçue :", firebaseConfig.apiKey);
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
 export const auth = getAuth(app);
