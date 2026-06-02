@@ -8,6 +8,7 @@ import Navbar from '@/components/Navbar';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { getMyInvitations, generateInvitation } from '@/services/api';
 import { Card, Heading, Text, Button, Divider } from '@gruand-co/core';
+import Modal from '@/components/Modal';
 
 interface Invite {
   id: string;
@@ -23,6 +24,7 @@ export default function InvitationsPage() {
   const [loading, setLoading] = useState(true);
   const [isFounder, setIsFounder] = useState(false);
   const [profileLoading, setProfileLoading] = useState(true);
+  const [errorModal, setErrorModal] = useState<{ isOpen: boolean; title: string; message: string } | null>(null);
 
   useEffect(() => {
     const fetchInvitesAndProfile = async () => {
@@ -58,7 +60,11 @@ export default function InvitationsPage() {
       const newInvite = await generateInvitation();
       setInvites(prev => [newInvite, ...prev]);
     } catch (err: any) {
-      alert(err.message || "Error forjando el sello");
+      setErrorModal({
+        isOpen: true,
+        title: 'Error de Forja',
+        message: err.message || "No se pudo forjar el sello de invitación. Verifica tu límite."
+      });
     } finally {
       setIsGenerating(false);
     }
@@ -184,6 +190,16 @@ export default function InvitationsPage() {
 
         <Footer className="mt-auto opacity-50 relative z-10" textContent="The Vault - 2026" />
       </main>
+
+      {errorModal && (
+        <Modal
+          isOpen={errorModal.isOpen}
+          onClose={() => setErrorModal(null)}
+          title={errorModal.title}
+          message={errorModal.message}
+          type="error"
+        />
+      )}
     </ProtectedRoute>
   );
 }

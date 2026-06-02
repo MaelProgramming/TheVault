@@ -11,6 +11,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import { RankBadge } from '@/components/RankBadge';
 import type { RankType } from '@/components/RankBadge';
 import { Card, Heading, Text, Button } from '@gruand-co/core';
+import Modal from '@/components/Modal';
 
 export default function ProfilePage() {
   const { user } = useAuth();
@@ -19,6 +20,7 @@ export default function ProfilePage() {
   const [bio, setBio] = useState('');
   const [loading, setLoading] = useState(true);
   const [isUploading, setIsUploading] = useState(false);
+  const [errorModal, setErrorModal] = useState<{ isOpen: boolean; title: string; message: string } | null>(null);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -83,7 +85,11 @@ export default function ProfilePage() {
       
     } catch (err: any) {
       console.error("Échec de la persistance :", err.message);
-      alert("Impossible de mettre à jour ton profil. Vérifie ta connexion.");
+      setErrorModal({
+        isOpen: true,
+        title: 'Error de Actualización',
+        message: 'No pudimos actualizar tu semblanza en el registro. Comprueba tu conexión.'
+      });
     }
   };
 
@@ -204,6 +210,16 @@ export default function ProfilePage() {
 
         <Footer className="mt-20 opacity-50 hover:opacity-100 transition-opacity duration-1000" textContent="The Vault - 2026" />
       </main>
+
+      {errorModal && (
+        <Modal
+          isOpen={errorModal.isOpen}
+          onClose={() => setErrorModal(null)}
+          title={errorModal.title}
+          message={errorModal.message}
+          type="error"
+        />
+      )}
     </ProtectedRoute>
   );
 }

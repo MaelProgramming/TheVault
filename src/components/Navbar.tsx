@@ -1,5 +1,6 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -8,10 +9,45 @@ import { auth } from '@/services/firebase';
 const Navbar = () => {
   const { user } = useAuth();
   const pathname = usePathname();
+  const [isFounder, setIsFounder] = useState(false);
+
+  useEffect(() => {
+    if (!user?.email) return;
+
+    const cachedFounder = localStorage.getItem('is_founder');
+    if (cachedFounder) {
+      setIsFounder(cachedFounder === 'true');
+      return;
+    }
+
+    const checkFounder = async () => {
+      try {
+        const token = localStorage.getItem('vault_token');
+        const res = await fetch('/api/members/me', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        if (res.ok) {
+          const profile = await res.json();
+          const isF = profile?.full_name?.includes('Mael Gruand') || 
+                      profile?.full_name?.includes('Eliot') || 
+                      profile?.email === 'maelg396@gmail.com' || 
+                      profile?.email === 'maelgruand7@gmail.com';
+          setIsFounder(isF);
+          localStorage.setItem('is_founder', isF ? 'true' : 'false');
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    checkFounder();
+  }, [user]);
 
   if (!user) return null;
 
-  const handleLogout = () => auth.signOut();
+  const handleLogout = () => {
+    localStorage.removeItem('is_founder');
+    auth.signOut();
+  };
 
   const links = [
     { name: 'El Registro', path: '/' },
@@ -19,6 +55,10 @@ const Navbar = () => {
     { name: 'Invitaciones', path: '/invitations' },
     { name: 'Mi Perfil', path: '/profile' },
   ];
+
+  if (isFounder) {
+    links.push({ name: 'Admin', path: '/admin' });
+  }
 
   return (
     <nav className="fixed bottom-0 md:top-0 md:bottom-auto left-0 w-full z-[100] bg-[#141210]/95 backdrop-blur-md border-t md:border-t-0 md:border-b border-[#C5A059]/20 px-6 py-4">
