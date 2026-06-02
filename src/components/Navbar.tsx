@@ -30,8 +30,7 @@ const Navbar = () => {
           const profile = await res.json();
           const isF = profile?.full_name?.includes('Mael Gruand') ||
             profile?.full_name?.includes('Eliot Dangas') ||
-            profile?.email === 'maelg396@gmail.com' ||
-            profile?.email === 'maelgruand7@gmail.com';
+            profile?.email === 'maelg396@gmail.com';
           setIsFounder(isF);
           localStorage.setItem('is_founder', isF ? 'true' : 'false');
         }
