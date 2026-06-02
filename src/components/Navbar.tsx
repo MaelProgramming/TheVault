@@ -28,10 +28,10 @@ const Navbar = () => {
         });
         if (res.ok) {
           const profile = await res.json();
-          const isF = profile?.full_name?.includes('Mael Gruand') || 
-                      profile?.full_name?.includes('Eliot') || 
-                      profile?.email === 'maelg396@gmail.com' || 
-                      profile?.email === 'maelgruand7@gmail.com';
+          const isF = profile?.full_name?.includes('Mael Gruand') ||
+            profile?.full_name?.includes('Eliot Dangas') ||
+            profile?.email === 'maelg396@gmail.com' ||
+            profile?.email === 'maelgruand7@gmail.com';
           setIsFounder(isF);
           localStorage.setItem('is_founder', isF ? 'true' : 'false');
         }
@@ -77,8 +77,8 @@ const Navbar = () => {
                 key={link.path}
                 href={link.path}
                 className={`text-[10px] tracking-[0.3em] uppercase transition-all duration-700 ease-in-out ${isActive
-                    ? 'text-[#C5A059] font-bold drop-shadow-[0_0_8px_rgba(197,160,89,0.3)]'
-                    : 'text-stone-500 hover:text-[#C5A059]/70'
+                  ? 'text-[#C5A059] font-bold drop-shadow-[0_0_8px_rgba(197,160,89,0.3)]'
+                  : 'text-stone-500 hover:text-[#C5A059]/70'
                   }`}
               >
                 {link.name}
