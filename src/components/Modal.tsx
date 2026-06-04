@@ -125,7 +125,7 @@ export const Modal: React.FC<ModalProps> = ({
                 )}
                 <Button
                   onClick={type === 'confirm' ? handleConfirm : onClose}
-                  variant={type === 'error' ? 'outline' : 'default'}
+                  variant={type === 'error' ? 'outline' : 'primary'}
                   className="flex-1 cursor-pointer"
                   style={{
                     backgroundColor: type === 'error' ? 'transparent' : '#C5A059',
