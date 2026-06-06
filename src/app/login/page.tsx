@@ -37,7 +37,7 @@ export default function Login() {
       });
 
       setTimeout(() => {
-        router.push('/');
+        router.push('/pay');
       }, 1500);
 
     } catch (err: any) {

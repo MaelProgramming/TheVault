@@ -51,7 +51,7 @@ export default function Register() {
       });
 
       setTimeout(() => {
-        router.push('/');
+        router.push('/pay');
       }, 1500);
 
     } catch (err: any) {

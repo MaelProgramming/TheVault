@@ -6,20 +6,53 @@ import { auth } from '@/services/firebase';
 
 interface AuthContextType {
   user: User | null;
+  profile: any | null;
   loading: boolean;
   token: string | null;
+  refreshProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
+  profile: null,
   loading: true,
   token: null,
+  refreshProfile: async () => {},
 });
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState<string | null>(null);
+
+  const fetchProfile = async (jwt: string) => {
+    try {
+      const res = await fetch('/api/members/me', {
+        headers: { 'Authorization': `Bearer ${jwt}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        // Preserve invited flag if present
+        if (data.invited_by_founder !== undefined) {
+          data.invited_by_founder = Boolean(data.invited_by_founder);
+        }
+        setProfile(data);
+      } else {
+        setProfile(null);
+      }
+    } catch (err) {
+      console.error('Failed to fetch profile:', err);
+      setProfile(null);
+    }
+  };
+
+  const refreshProfile = async () => {
+    const jwt = token || localStorage.getItem('vault_token');
+    if (jwt) {
+      await fetchProfile(jwt);
+    }
+  };
 
   useEffect(() => {
     // Écouteur temps réel de Firebase
@@ -30,11 +63,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.setItem('vault_token', jwt);
         setToken(jwt);
         setUser(firebaseUser);
+        await fetchProfile(jwt);
       } else {
         // Nettoyage si déconnexion
         localStorage.setItem('vault_token', '');
         setToken(null);
         setUser(null);
+        setProfile(null);
       }
       setLoading(false);
     });
@@ -43,7 +78,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, token }}>
+    <AuthContext.Provider value={{ user, profile, loading, token, refreshProfile }}>
       {!loading && children}
     </AuthContext.Provider>
   );
