@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
                 name: 'Invitación del Founder – The Vault',
                 description: 'Acceso al club para usuarios invitados por el fundador',
               },
-              unit_amount: 8000, // 80.00 EUR in cents, can be adjusted
+              unit_amount: 5000, // 50.00 EUR in cents (Founder discount)
             },
             quantity: 1,
           },

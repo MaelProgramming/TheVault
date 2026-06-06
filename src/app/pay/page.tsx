@@ -103,10 +103,14 @@ export default function PayPage() {
             <div className="text-center mb-8">
               <span className="text-[10px] tracking-[0.3em] uppercase text-[#C5A059]/60">Acceso VIP Único & Vitalicio</span>
               <div className="mt-4 flex justify-center items-baseline text-[#EFEBE4]">
-                <span className="text-6xl font-bold tracking-tight">80</span>
+                <span className="text-6xl font-bold tracking-tight">
+                  {profile?.invited_by_founder ? '50' : '80'}
+                </span>
                 <span className="text-3xl ml-1 text-[#C5A059] font-sans">€</span>
               </div>
-              <p className="mt-2 text-xs text-[#C5A059]/40 uppercase tracking-widest">Cuota de admisión única</p>
+              <p className="mt-2 text-xs text-[#C5A059]/40 uppercase tracking-widest">
+                {profile?.invited_by_founder ? 'Cuota con descuento de fundador' : 'Cuota de admisión única'}
+              </p>
             </div>
 
             {/* List of Benefits */}
