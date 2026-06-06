@@ -29,7 +29,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchProfile = async (jwt: string) => {
     try {
       const res = await fetch('/api/members/me', {
-        headers: { 'Authorization': `Bearer ${jwt}` }
+        headers: { 'Authorization': `Bearer ${jwt}` },
+        cache: 'no-store'
       });
       if (res.ok) {
         const data = await res.json();
