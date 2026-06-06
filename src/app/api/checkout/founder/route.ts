@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
       metadata: {
         email: user.email,
         member_id: member.id,
-        invited: true,
+        invited: 'true',
       },
       success_url: `${origin}/pay/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/pay?canceled=true`,
