@@ -135,42 +135,43 @@ export default function PayPage() {
 
             {/* Submit Button */}
             <div className="space-y-4">
-              <Button
-                onClick={handleCheckout}
-                disabled={loading}
-                variant="outline"
-                className="w-full cursor-pointer transition-all duration-300 hover:bg-[#C5A059]/10"
-                style={{
-                  padding: '18px 0',
-                  fontSize: '11px',
-                  letterSpacing: '0.45em',
-                  textTransform: 'uppercase',
-                  color: '#C5A059',
-                  border: '1px solid rgba(197, 160, 89, 0.4)',
-                  backgroundColor: '#1E1B19'
-                }}
-              >
-                {loading ? 'Redirigiendo a Stripe...' : 'Pagar The Vault Club Entry'}
-              </Button>
-                {profile?.invited_by_founder && (
-                  <Button
-                    onClick={handleFounderCheckout}
-                    disabled={loading}
-                    variant="outline"
-                    className="w-full cursor-pointer mt-4 transition-all duration-300 hover:bg-[#C5A059]/10"
-                    style={{
-                      padding: '18px 0',
-                      fontSize: '11px',
-                      letterSpacing: '0.45em',
-                      textTransform: 'uppercase',
-                      color: '#C5A059',
-                      border: '1px solid rgba(197, 160, 89, 0.4)',
-                      backgroundColor: '#1E1B19'
-                    }}
-                  >
-                    {loading ? 'Redirigiendo a Stripe...' : 'Pagar Invitación Founder'}
-                  </Button>
-                )}
+              {profile?.invited_by_founder ? (
+                <Button
+                  onClick={handleFounderCheckout}
+                  disabled={loading}
+                  variant="outline"
+                  className="w-full cursor-pointer transition-all duration-300 hover:bg-[#C5A059]/10"
+                  style={{
+                    padding: '18px 0',
+                    fontSize: '11px',
+                    letterSpacing: '0.45em',
+                    textTransform: 'uppercase',
+                    color: '#C5A059',
+                    border: '1px solid rgba(197, 160, 89, 0.4)',
+                    backgroundColor: '#1E1B19'
+                  }}
+                >
+                  {loading ? 'Redirigiendo a Stripe...' : 'Pagar Invitación Founder'}
+                </Button>
+              ) : (
+                <Button
+                  onClick={handleCheckout}
+                  disabled={loading}
+                  variant="outline"
+                  className="w-full cursor-pointer transition-all duration-300 hover:bg-[#C5A059]/10"
+                  style={{
+                    padding: '18px 0',
+                    fontSize: '11px',
+                    letterSpacing: '0.45em',
+                    textTransform: 'uppercase',
+                    color: '#C5A059',
+                    border: '1px solid rgba(197, 160, 89, 0.4)',
+                    backgroundColor: '#1E1B19'
+                  }}
+                >
+                  {loading ? 'Redirigiendo a Stripe...' : 'Pagar The Vault Club Entry'}
+                </Button>
+              )}
 
               
               {error && (
