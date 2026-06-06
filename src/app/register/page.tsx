@@ -35,6 +35,8 @@ export default function Register() {
       const token = await userCredential.user.getIdToken();
       localStorage.setItem('vault_token', token);
 
+      const inviteCode = localStorage.getItem('vault_invite_code') || '';
+
       // 3. Create member profile in database via our API route
       await createMemberProfile({
         name,
@@ -42,8 +44,10 @@ export default function Register() {
         gender,
         major,
         year,
-        graduation_year: graduationYear
+        graduation_year: graduationYear,
+        invite_code: inviteCode
       });
+      localStorage.removeItem('vault_invite_code');
       
       setStatus({ 
         type: 'success', 

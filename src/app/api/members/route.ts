@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { full_name, name, gender, major, graduation_year, year } = await req.json();
+    const { full_name, name, gender, major, graduation_year, year, invite_code } = await req.json();
 
     // Verify if profile already exists
     const { data: existing } = await supabase
@@ -97,6 +97,37 @@ export async function POST(req: NextRequest) {
 
     if (existing) {
       return NextResponse.json({ error: 'El miembro ya existe' }, { status: 400 });
+    }
+
+    let invitedByFounder = false;
+
+    if (invite_code) {
+      const { data: invite } = await supabase
+        .from('invitations')
+        .select('*, creator:members!created_by(id, full_name, email)')
+        .eq('code', invite_code)
+        .eq('status', 'active')
+        .single();
+
+      if (invite) {
+        const creatorEmail = invite.creator?.email;
+        const creatorName = invite.creator?.full_name;
+
+        const isFounderCreator = creatorEmail === 'maelg396@gmail.com' ||
+                                 creatorEmail === 'maelgruand7@gmail.com' ||
+                                 creatorName?.includes('Mael Gruand') ||
+                                 creatorName?.includes('Eliot');
+
+        if (isFounderCreator) {
+          invitedByFounder = true;
+        }
+
+        // Mark code as used
+        await supabase
+          .from('invitations')
+          .update({ status: 'used' })
+          .eq('id', invite.id);
+      }
     }
 
     const { data, error } = await supabase
@@ -111,6 +142,7 @@ export async function POST(req: NextRequest) {
           bio: '',
           avatar_url: '',
           is_verified: false,
+          invited_by_founder: invitedByFounder,
           university: 'The Vault',
           random_seed: Math.floor(Math.random() * 100)
         }

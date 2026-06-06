@@ -34,6 +34,7 @@ export default function VaultGate() {
     setError(null);
     try {
       await verifyInvitationCode(code);
+      localStorage.setItem('vault_invite_code', code);
       triggerUnlock();
     } catch (err: any) {
       setError(err.message || 'Llave Invalida');
