@@ -16,7 +16,7 @@ interface Invite {
   status: 'active' | 'used';
   created_at?: string;
 }
-
+{ {/* App d'elite avec des invites pour entre  des gens */ } }
 export default function InvitationsPage() {
   const [invites, setInvites] = useState<Invite[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -39,9 +39,9 @@ export default function InvitationsPage() {
         if (profileRes.ok) {
           const profileData = await profileRes.json();
           const founderCheck = profileData.email === 'maelg396@gmail.com' ||
-                               profileData.email === 'maelgruand7@gmail.com' ||
-                               profileData.full_name?.includes('Mael Gruand') ||
-                               profileData.full_name?.includes('Eliot');
+            profileData.email === 'maelgruand7@gmail.com' ||
+            profileData.full_name?.includes('Mael Gruand') ||
+            profileData.full_name?.includes('Eliot');
           setIsFounder(founderCheck);
         }
       } catch (err) {
