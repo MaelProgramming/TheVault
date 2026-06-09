@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Inter, Raleway, Cinzel } from "next/font/google";
 import "./globals.css";
 import ClientProviders from "@/components/ClientProviders";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
@@ -48,6 +49,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-[#141210] text-[#EFEBE4]">
         <ClientProviders>{children}</ClientProviders>
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || ""} />
       </body>
     </html>
   );
