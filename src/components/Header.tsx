@@ -10,7 +10,7 @@ const Header: React.FC<HeaderProps> = ({ className = "", textContent = "", title
       <Heading level={1} variant="gold" className="text-center italic tracking-widest animate-text-shine">
         {titleContent}
       </Heading>
-      <Divider ornament style={{ width: '120px', margin: '20px auto' }} />
+      <Divider ornament style={{ width: '120px', margin: '10px auto' }} />
       <Text variant="small" style={{ letterSpacing: '0.4em', textTransform: 'uppercase', color: '#C5A059', opacity: 0.7 }} className="text-center">
         {textContent}
       </Text>

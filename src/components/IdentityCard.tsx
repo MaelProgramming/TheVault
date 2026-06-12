@@ -18,6 +18,17 @@ const IdentityCard: React.FC<ExtendedProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { user } = useAuth();
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const isFounder = name.includes('Mael Gruand');
   const isCoFounder = name.includes('Eliot Dangas');
   let rank: RankType = 'POSTULANT';
@@ -59,9 +70,9 @@ const IdentityCard: React.FC<ExtendedProps> = ({
   const avatarSrc = currentImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=F5F5DC&color=C5A059`;
 
   const cardInnerContent = (
-    <div className="group w-full max-w-[350px] transition-all duration-700 gold-shine-card">
-      <Card elevation="high" hoverable style={{ backgroundColor: '#F5F5DC', border: '1px solid #C5A059' }}>
-        <div className="relative h-[400px] w-full overflow-hidden bg-[#F5F5F5] mb-4">
+    <div className="group w-full max-w-[310px] sm:max-w-[350px] transition-all duration-700 gold-shine-card">
+      <Card elevation="high" hoverable style={{ backgroundColor: '#F5F5DC', border: '1px solid #C5A059', padding: isMobile ? '8px 12px 12px 12px' : '24px' }}>
+        <div className="relative h-[210px] sm:h-[310px] md:h-[400px] w-full overflow-hidden bg-[#F5F5F5] mb-4">
           <img
             src={avatarSrc}
             alt={name}
@@ -94,16 +105,16 @@ const IdentityCard: React.FC<ExtendedProps> = ({
         </div>
 
         <div className="text-center px-2">
-          <RankBadge rank={rank} className="mb-4" />
+          <RankBadge rank={rank} className="mb-2 sm:mb-4" />
           {elite_score !== undefined && (
-            <Text variant="small" style={{ color: '#C5A059', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '8px', fontWeight: 600 }}>
+            <Text variant="small" style={{ color: '#C5A059', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '4px', fontWeight: 600 }}>
               ✧ Afinidad Élite: {elite_score}%
             </Text>
           )}
-          <Heading level={2} style={{ letterSpacing: '0.15em', textTransform: 'uppercase', color: 'black', fontSize: '1.25rem' }}>
+          <Heading level={2} style={{ letterSpacing: '0.15em', textTransform: 'uppercase', color: 'black', fontSize: '1.1rem' }}>
             {name}
           </Heading>
-          <div className="flex items-center justify-center gap-2 mt-2">
+          <div className="flex items-center justify-center gap-2 mt-1 sm:mt-2">
             <p className="text-[10px] font-light tracking-widest text-stone-600 uppercase">{major}</p>
             <span className="w-1 h-1 bg-stone-400 rounded-full"></span>
             <p className="text-[10px] font-light tracking-widest text-stone-600 uppercase">{year}</p>
@@ -115,7 +126,7 @@ const IdentityCard: React.FC<ExtendedProps> = ({
               setIsOpen(true);
             }}
             variant="outline"
-            className="mt-6 w-full cursor-pointer"
+            className="mt-3 sm:mt-6 w-full cursor-pointer"
             style={{
               border: '1px solid black',
               color: 'black',

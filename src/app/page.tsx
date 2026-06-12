@@ -36,15 +36,15 @@ export default function Home() {
   return (
     <ProtectedRoute>
       <Navbar />
-      <main className="min-h-screen bg-[#141210] text-[#EFEBE4] flex flex-col items-center pt-24 pb-32 px-4 overflow-hidden">
+      <main className="min-h-screen bg-[#141210] text-[#EFEBE4] flex flex-col items-center pt-6 sm:pt-16 md:pt-24 pb-20 sm:pb-28 md:pb-32 px-4 overflow-hidden">
         <Header
-          className="mb-12 text-center max-w-2xl"
+          className="mb-6 md:mb-12 text-center max-w-2xl"
           titleContent="The Vault"
           textContent="Exclusividad • Tradición • Futuro"
         />
 
         {/* GENDER FILTER BUTTONS */}
-        <nav className="flex gap-8 mb-16 border-b border-[#C5A059]/20 pb-4 z-10">
+        <nav className="flex gap-8 mb-8 md:mb-16 border-b border-[#C5A059]/20 pb-4 z-10">
           {(['ALL', 'M', 'F'] as const).map((t) => (
             <button
               key={t}
@@ -60,7 +60,7 @@ export default function Home() {
         </nav>
 
         {/* LOADING & ERROR STATES OR STACK */}
-        <div className="relative w-full max-w-md flex justify-center items-center h-[550px]">
+        <div className="relative w-full max-w-md flex justify-center items-center h-[460px] sm:h-[520px] md:h-[550px]">
           {isLoading ? (
             <Loader />
           ) : error ? (

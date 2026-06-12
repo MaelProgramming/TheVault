@@ -65,7 +65,7 @@ const Stack: React.FC<GridProps> = ({ members, className = "", onSwipeSuccess })
   }
 
   return (
-    <div className={`relative flex justify-center items-center h-[500px] w-full ${className}`}>
+    <div className={`relative flex justify-center items-center h-[420px] sm:h-[480px] md:h-[500px] w-full ${className}`}>
       
       {/* MATCH OVERLAY */}
       <AnimatePresence>
