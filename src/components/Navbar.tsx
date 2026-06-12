@@ -60,7 +60,7 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="fixed bottom-0 md:top-0 md:bottom-auto left-0 w-full z-[100] bg-[#141210]/95 backdrop-blur-md border-t md:border-t-0 md:border-b border-[#C5A059]/20 px-6 py-4">
+    <nav className="fixed bottom-0 md:top-0 md:bottom-auto left-0 w-full z-[100] bg-[#141210]/95 backdrop-blur-md border-t md:border-t-0 md:border-b border-[#C5A059]/20 px-6 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))] md:py-4">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         {/* Logo */}
         <Link href="/" className="hidden md:block font-serif italic text-xl tracking-tighter text-[#C5A059] hover:opacity-80 transition-opacity">

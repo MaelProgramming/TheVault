@@ -1,0 +1,19 @@
+{
+  "name": "The Vault",
+  "short_name": "The Vault",
+  "description": "Exclusividad • Tradición • Futuro",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#141210",
+  "theme_color": "#141210",
+  "orientation": "portrait",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

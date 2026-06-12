@@ -78,7 +78,7 @@ export default function Login() {
               required
               className="w-full"
               style={{
-                fontSize: '11px',
+                fontSize: '16px',
                 letterSpacing: '0.2em',
                 textTransform: 'uppercase',
                 color: '#EFEBE4'
@@ -97,7 +97,7 @@ export default function Login() {
               required
               className="w-full"
               style={{
-                fontSize: '11px',
+                fontSize: '16px',
                 letterSpacing: '0.2em',
                 textTransform: 'uppercase',
                 color: '#EFEBE4'

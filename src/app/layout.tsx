@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter, Raleway, Cinzel } from "next/font/google";
 import "./globals.css";
 import ClientProviders from "@/components/ClientProviders";
@@ -32,9 +32,25 @@ const cinzel = Cinzel({
 export const metadata: Metadata = {
   title: "The Vault",
   description: "Exclusividad • Tradición • Futuro",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "The Vault",
+  },
   icons: {
     icon: "/favicon.ico",
+    apple: "/icon.png",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#141210",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({

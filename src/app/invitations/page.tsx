@@ -25,6 +25,13 @@ export default function InvitationsPage() {
   const [isFounder, setIsFounder] = useState(false);
   const [profileLoading, setProfileLoading] = useState(true);
   const [errorModal, setErrorModal] = useState<{ isOpen: boolean; title: string; message: string } | null>(null);
+  const [canShare, setCanShare] = useState(false);
+
+  useEffect(() => {
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      setCanShare(true);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchInvitesAndProfile = async () => {
@@ -70,11 +77,33 @@ export default function InvitationsPage() {
     }
   };
 
-  const copyToClipboard = (code: string, id: string) => {
+  const handleShareOrCopy = async (code: string, id: string) => {
     const text = `Has sido seleccionado. Presenta este sello en La Bóveda para solicitar tu admisión: ${code}`;
-    navigator.clipboard.writeText(text);
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 3000);
+    const shareData = {
+      title: 'The Vault',
+      text: text,
+      url: `${window.location.origin}/invite?code=${code}`
+    };
+
+    if (typeof navigator !== 'undefined' && navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      try {
+        await navigator.share(shareData);
+        return;
+      } catch (err) {
+        if ((err as Error).name === 'AbortError') {
+          return;
+        }
+        console.warn("Share failed, falling back to copy:", err);
+      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 3000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
   };
 
   return (
@@ -174,10 +203,10 @@ export default function InvitationsPage() {
                         </div>
 
                         <button
-                          onClick={() => copyToClipboard(invite.code, invite.id)}
+                          onClick={() => handleShareOrCopy(invite.code, invite.id)}
                           className="text-[#C5A059] text-[9px] tracking-[0.2em] uppercase hover:text-white transition-colors duration-300 cursor-pointer"
                         >
-                          {copiedId === invite.id ? 'COPIADO ✓' : 'COPIAR SELLO'}
+                          {copiedId === invite.id ? 'COPIADO ✓' : canShare ? 'COMPARTIR' : 'COPIAR SELLO'}
                         </button>
                       </div>
                     </Card>

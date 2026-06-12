@@ -215,7 +215,7 @@ export default function ConversationsPage() {
                     placeholder="Escribir misiva..."
                     className="flex-1"
                     style={{
-                      fontSize: '12px',
+                      fontSize: '16px',
                       letterSpacing: '0.05em',
                       color: '#EFEBE4'
                     }}
