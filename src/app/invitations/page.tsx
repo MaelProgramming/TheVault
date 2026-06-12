@@ -28,7 +28,7 @@ export default function InvitationsPage() {
   const [canShare, setCanShare] = useState(false);
 
   useEffect(() => {
-    if (typeof navigator !== 'undefined' && navigator.share) {
+    if (typeof navigator !== 'undefined' && 'share' in navigator) {
       setCanShare(true);
     }
   }, []);
@@ -85,7 +85,7 @@ export default function InvitationsPage() {
       url: `${window.location.origin}/invite?code=${code}`
     };
 
-    if (typeof navigator !== 'undefined' && navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+    if (typeof navigator !== 'undefined' && 'share' in navigator && 'canShare' in navigator && navigator.canShare(shareData)) {
       try {
         await navigator.share(shareData);
         return;
