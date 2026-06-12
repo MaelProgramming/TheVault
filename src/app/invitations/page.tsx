@@ -153,7 +153,7 @@ export default function InvitationsPage() {
             <Heading level={3} variant="gold" className="text-xl italic mb-8">
               Sellos Activos {isFounder ? `(${invites.length})` : `(${invites.length}/3)`}
             </Heading>
-            <Divider style={{ borderColor: 'rgba(197, 160, 89, 0.2)', marginBottom: '32px' }} />
+
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
               <AnimatePresence>
