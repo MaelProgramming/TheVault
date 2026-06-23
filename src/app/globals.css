@@ -10,6 +10,10 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
   --font-serif: var(--font-cormorant);
+  
+  --color-cream: #F5F5DC;
+  --color-gold-brushed: #C5A059;
+  --color-black-deep: #000000;
 }
 
 body {
@@ -95,5 +99,51 @@ body {
   opacity: 1;
   left: 120%;
   transition: left 1.5s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+/* Old Money Scoped Theme Styles */
+.theme-old-money {
+  background: radial-gradient(circle at center, #FDFBF7 0%, #F5F5DC 100%);
+  color: #000000;
+  position: relative;
+  font-family: var(--font-inter), sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.theme-old-money::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.02;
+  pointer-events: none;
+  background-image: radial-gradient(#000000 1px, transparent 0), radial-gradient(#000000 1px, transparent 0);
+  background-size: 8px 8px;
+  background-position: 0 0, 4px 4px;
+  z-index: 1;
+}
+
+.theme-old-money h1,
+.theme-old-money h2,
+.theme-old-money h3,
+.theme-old-money h4,
+.theme-old-money h5,
+.theme-old-money h6 {
+  font-family: var(--font-cormorant), serif;
+  color: #000000;
+}
+
+.theme-old-money input,
+.theme-old-money select,
+.theme-old-money textarea {
+  color: #000000 !important;
+  background-color: transparent !important;
+  border-color: rgba(197, 160, 89, 0.4) !important;
+}
+
+.theme-old-money input::placeholder {
+  color: rgba(0, 0, 0, 0.4) !important;
 }
 

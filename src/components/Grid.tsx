@@ -81,8 +81,7 @@ const Stack: React.FC<GridProps> = ({ members, className = "", onSwipeSuccess })
           >
             {/* Hand-stitched leather patch frame border */}
             <div 
-              className="absolute inset-6 border border-[#C5A059]/20 rounded-sm pointer-events-none" 
-              style={{ borderStyle: 'dashed', borderWidth: '1px' }} 
+              className="absolute inset-6 border-dashed border-[1px] border-[#C5A059]/20 rounded-sm pointer-events-none" 
             />
 
             {/* Glowing ambient light */}

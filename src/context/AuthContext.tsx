@@ -62,12 +62,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // On récupère le token frais pour le backend
         const jwt = await firebaseUser.getIdToken();
         localStorage.setItem('vault_token', jwt);
+        document.cookie = `vault_token=${jwt}; path=/; max-age=3600; SameSite=Lax; Secure`;
         setToken(jwt);
         setUser(firebaseUser);
         await fetchProfile(jwt);
       } else {
         // Nettoyage si déconnexion
         localStorage.setItem('vault_token', '');
+        document.cookie = "vault_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
         setToken(null);
         setUser(null);
         setProfile(null);
