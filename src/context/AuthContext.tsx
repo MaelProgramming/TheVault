@@ -39,6 +39,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           data.invited_by_founder = Boolean(data.invited_by_founder);
         }
         setProfile(data);
+      } else if (res.status === 404) {
+        // Le profil n'existe pas en base de données. On déconnecte Firebase pour résoudre l'incohérence de compte.
+        console.warn("Profil introuvable dans la base (404). Déconnexion de Firebase.");
+        setProfile(null);
+        await auth.signOut();
       } else {
         setProfile(null);
       }
@@ -62,7 +67,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // On récupère le token frais pour le backend
         const jwt = await firebaseUser.getIdToken();
         localStorage.setItem('vault_token', jwt);
-        document.cookie = `vault_token=${jwt}; path=/; max-age=3600; SameSite=Lax; Secure`;
+        document.cookie = `vault_token=${jwt}; path=/; max-age=3600; SameSite=Lax`;
         setToken(jwt);
         setUser(firebaseUser);
         await fetchProfile(jwt);
