@@ -61,7 +61,7 @@ export default function LandingPage() {
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         className="sticky top-0 z-40 bg-[#F5F5DC]/80 backdrop-blur-md border-b border-[#C5A059]/15 px-6 sm:px-12 py-5 flex items-center justify-between"
       >
-        <div 
+        <div
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className="cursor-pointer"
         >
@@ -94,7 +94,7 @@ export default function LandingPage() {
           >
             Connexion
           </button>
-          
+
           <Button
             onClick={() => router.push('/invite')}
             variant="outline"
@@ -134,7 +134,7 @@ export default function LandingPage() {
           {/* Explanatory subphrase */}
           <motion.div variants={itemVariants} className="max-w-xl mx-auto mt-8">
             <Text variant="lead" className="!text-[#000000]/70 !text-[14px] sm:!text-[16px] leading-relaxed tracking-wide font-sans">
-              The Vault rassemble les esprits les plus distingués des grandes universités. 
+              The Vault rassemble les esprits les plus distingués des grandes universités.
               Un espace de réseautage souverain, accessible uniquement sur cooptation stricte.
             </Text>
           </motion.div>
@@ -153,7 +153,7 @@ export default function LandingPage() {
             >
               Demander l'Accès
             </Button>
-            
+
             <p className="text-[9px] uppercase tracking-[0.25em] text-[#C5A059] italic mt-2">
               Processus de cooptation rigoureux
             </p>
@@ -183,11 +183,11 @@ export default function LandingPage() {
                 <span className="text-[10px] tracking-[0.4em] uppercase text-[#C5A059] font-semibold mb-4 block">
                   Notre Philosophie
                 </span>
-                
+
                 <h3 className="text-4xl sm:text-5xl font-serif text-[#000000] leading-none mb-6">
                   La pureté de l'alignement.
                 </h3>
-                
+
                 <div className="w-16 h-[2px] bg-[#C5A059] mb-6"></div>
               </div>
 
@@ -196,7 +196,7 @@ export default function LandingPage() {
                 <Text variant="serif" className="!text-[#000000] !text-lg sm:!text-xl leading-relaxed italic">
                   "Nous croyons que la valeur d'un réseau ne réside pas dans son volume, mais dans l'intégrité de ses membres. Notre mission est de préserver un salon d'échange intellectuel pour les leaders de demain."
                 </Text>
-                
+
                 <Text className="!text-[#000000]/70 !text-[14px] leading-relaxed tracking-wide font-sans">
                   Dans une époque saturée par le bruit et les algorithmes de masse, The Vault propose une alternative souveraine. Un espace confidentiel de haute tenue sociale et intellectuelle où chaque membre est validé manuellement par notre comité d'admission.
                 </Text>
@@ -270,21 +270,21 @@ export default function LandingPage() {
                 >
                   {/* Subtle inner background sweep on hover */}
                   <div className="absolute inset-0 bg-gradient-to-br from-[#C5A059]/2 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
-                  
+
                   <div>
                     <span className="text-[9px] tracking-[0.3em] text-[#C5A059] font-bold block mb-4">
                       {pillar.subtitle}
                     </span>
-                    
+
                     <h4 className="text-xl sm:text-2xl font-serif text-[#000000] mb-4">
                       {pillar.title}
                     </h4>
-                    
+
                     <Text className="!text-[#000000]/70 !text-[13px] sm:!text-[14px] leading-relaxed font-sans">
                       {pillar.description}
                     </Text>
                   </div>
-                  
+
                   <div className="w-6 h-[1px] bg-[#C5A059]/40 group-hover:w-16 transition-all duration-1000 mt-8" />
                 </Card>
               </motion.div>
@@ -314,7 +314,7 @@ export default function LandingPage() {
           {/* Social Links */}
           <div className="flex space-x-12">
             <a
-              href="https://x.com"
+              href="https://x.com/MGruand90223"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[10px] tracking-[0.25em] uppercase text-[#F5F5DC]/60 hover:text-[#C5A059] transition-colors duration-500 font-medium"
@@ -322,7 +322,7 @@ export default function LandingPage() {
               Twitter / X
             </a>
             <a
-              href="https://linkedin.com"
+              href="https://linkedin.com/in/mael-gruand/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[10px] tracking-[0.25em] uppercase text-[#F5F5DC]/60 hover:text-[#C5A059] transition-colors duration-500 font-medium"
